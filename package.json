@@ -1,0 +1,10 @@
+{
+  "name": "tizen-media-diagnostic",
+  "version": "1.0.0",
+  "packageType": "app",
+  "appName": "Media Diagnostic",
+  "appPath": "index.html",
+  "serviceFile": "service.js",
+  "description": "Read-only Tizen compatibility diagnostic",
+  "keys": []
+}

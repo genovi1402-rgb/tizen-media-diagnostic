@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Media Diagnostic</title>
+<style>
+body {
+    background: #101820;
+    color: white;
+    font: 28px Arial, sans-serif;
+    padding: 50px;
+}
+.ok { color: #76e0a0; }
+</style>
+</head>
+<body>
+<h1>Media Diagnostic</h1>
+<p class="ok">Web module: OK</p>
+<p id="engine"></p>
+<p id="network">Network: checking...</p>
+<script>
+document.getElementById("engine").textContent =
+    navigator.userAgent;
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET",
+    "https://cdn.jsdelivr.net/gh/genovi1402-rgb/tizen-media-diagnostic@main/package.json",
+    true);
+xhr.timeout = 10000;
+xhr.onload = function() {
+    document.getElementById("network").textContent =
+        "CDN HTTP status: " + xhr.status;
+};
+xhr.onerror = xhr.ontimeout = function() {
+    document.getElementById("network").textContent =
+        "CDN connection failed";
+};
+xhr.send();
+</script>
+</body>
+</html>
