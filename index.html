@@ -2,60 +2,40 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Media Diagnostic v2</title>
+<title>Media Diagnostic</title>
 <style>
 body {
     background: #101820;
     color: white;
     font: 28px Arial, sans-serif;
-    padding: 40px;
+    padding: 50px;
 }
-pre {
-    white-space: pre-wrap;
-    color: #76e0a0;
-}
+.ok { color: #76e0a0; }
 </style>
 </head>
 <body>
-<h1>Media Diagnostic v2</h1>
-<p>Web module: OK</p>
-<pre id="result">Waiting for service...</pre>
+<h1>Media Diagnostic</h1>
+<p class="ok">Web module: OK</p>
+<p id="engine"></p>
+<p id="network">Network: checking...</p>
 <script>
-var attempts = 0;
+document.getElementById("engine").textContent =
+    navigator.userAgent;
 
-function check() {
-    attempts++;
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET",
-        "http://127.0.0.1:18765/", true);
-    xhr.timeout = 3000;
-
-    function retry() {
-        document.getElementById("result").textContent =
-            "Service connection: attempt " + attempts;
-        if (attempts < 15) {
-            setTimeout(check, 2000);
-        } else {
-            document.getElementById("result").textContent =
-                "Service unavailable";
-        }
-    }
-
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            document.getElementById("result").textContent =
-                JSON.stringify(
-                    JSON.parse(xhr.responseText), null, 2);
-        } else {
-            retry();
-        }
-    };
-
-    xhr.onerror = xhr.ontimeout = retry;
-    xhr.send();
-}
-
-check();
+var xhr = new XMLHttpRequest();
+xhr.open("GET",
+    "https://cdn.jsdelivr.net/gh/genovi1402-rgb/tizen-media-diagnostic@main/package.json",
+    true);
+xhr.timeout = 10000;
+xhr.onload = function() {
+    document.getElementById("network").textContent =
+        "CDN HTTP status: " + xhr.status;
+};
+xhr.onerror = xhr.ontimeout = function() {
+    document.getElementById("network").textContent =
+        "CDN connection failed";
+};
+xhr.send();
 </script>
 </body>
 </html>
